@@ -9,6 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'me.champeau.gradle.jmh' version '0.5.2'
 }
 
 repositories {
