@@ -5,14 +5,44 @@ package net.kaoriya.playground.duckdb;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        var dir = new java.io.File("tmp/duckdb1");
+        System.out.println("Hello DuckDB Playground");
+    }
+
+    void duckdbPrepareDir() throws java.io.IOException {
+        var dir = new java.io.File("build/testdb/duckdb1");
         if (!dir.exists() && !dir.mkdirs()) {
             throw new java.io.IOException();
         }
-        try(var conn = java.sql.DriverManager.getConnection("jdbc:duckdb:tmp/duckdb1/playground")) {
+    }
+
+    public void duckdbBasic() throws Exception {
+        duckdbPrepareDir();
+        try(var conn = java.sql.DriverManager.getConnection("jdbc:duckdb:build/testdb/duckdb1/basic")) {
             var stmt = conn.createStatement();
             stmt.execute("CREATE TABLE items (item VARCHAR, value DECIMAL(10,2), count INTEGER)");
             stmt.execute("INSERT INTO items VALUES ('jeans', 20.0, 1), ('hammer', 42.2, 2)");
+            try (var rs = stmt.executeQuery("SELECT * FROM items")) {
+                while (rs.next()) {
+                    System.out.println(rs.getString(1));
+                    System.out.println(rs.getInt(3));
+                }
+            }
+        }
+    }
+
+    void sqlitePrepareDir() throws java.io.IOException {
+        var dir = new java.io.File("build/testdb/sqlite1");
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new java.io.IOException();
+        }
+    }
+
+    public void sqliteBasic() throws Exception {
+        sqlitePrepareDir();
+        try(var conn = java.sql.DriverManager.getConnection("jdbc:sqlite:build/testdb/sqlite1/basic")) {
+            var stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE items (item VARCHAR, value DECIMAL(10,2), count INTEGER)");
+            stmt.execute("INSERT INTO items VALUES ('beam', 20.0, 1), ('summer', 42.2, 2)");
             try (var rs = stmt.executeQuery("SELECT * FROM items")) {
                 while (rs.next()) {
                     System.out.println(rs.getString(1));

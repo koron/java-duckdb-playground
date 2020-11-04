@@ -8,7 +8,14 @@ import static org.junit.Assert.*;
 
 public class AppTest {
     @Test
-    public void testMain() throws Exception {
-        App.main(null);
+    public void testDuckDBBasic() throws Exception {
+        var app = new App();
+        app.duckdbBasic();
+    }
+
+    @Test
+    public void testSQLiteBasic() throws Exception {
+        var app = new App();
+        app.sqliteBasic();
     }
 }
