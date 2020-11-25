@@ -39,7 +39,4 @@ jmh {
 
     warmup = '1s'
     warmupIterations = 1
-
-    timeOnIteration = '1s'
-    iterations = 3
 }

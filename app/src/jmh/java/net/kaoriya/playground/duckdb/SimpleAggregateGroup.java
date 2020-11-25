@@ -2,6 +2,7 @@ package net.kaoriya.playground.duckdb;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -37,6 +38,8 @@ public class SimpleAggregateGroup {
     final static int[] expecteds = new int[]{95000000, 97000000, 99000000, 101000000, 103000000};
 
     @Benchmark
+    @BenchmarkMode(Mode.SingleShotTime)
+    @Measurement(iterations = 10)
     public void aggregation() throws Exception {
         try (var rs = stmt.executeQuery("SELECT i, SUM(j) FROM integers GROUP BY i ORDER BY i")) {
             while (rs.next()) {
@@ -47,4 +50,3 @@ public class SimpleAggregateGroup {
         }
     }
 }
-

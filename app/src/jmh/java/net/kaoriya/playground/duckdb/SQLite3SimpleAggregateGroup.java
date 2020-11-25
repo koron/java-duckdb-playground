@@ -15,16 +15,25 @@ import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
-public class SimpleAggregate {
+public class SQLite3SimpleAggregateGroup {
 
     Connection conn;
     Statement stmt;
 
     @Setup
     public void openDB() throws Exception {
-        conn = java.sql.DriverManager.getConnection("jdbc:duckdb:");
+        conn = java.sql.DriverManager.getConnection("jdbc:sqlite::memory:");
+        conn.setAutoCommit(false);
         stmt = conn.createStatement();
-        stmt.execute("CREATE TABLE integers AS SELECT i % 5 AS i FROM range(0, 10000000) tbl(i);");
+        stmt.execute("CREATE TABLE integers (i int, j int)");
+        try (var p = conn.prepareStatement("INSERT INTO integers VALUES(?, ?)")) {
+            for (var i = 0; i < 10000000; i++) {
+                p.setInt(1, i % 5);
+                p.setInt(2, i % 100);
+                p.execute();
+            }
+        }
+        conn.commit();
     }
 
     @TearDown
@@ -35,13 +44,15 @@ public class SimpleAggregate {
         conn = null;
     }
 
+    final static int[] expecteds = new int[]{95000000, 97000000, 99000000, 101000000, 103000000};
+
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 10)
     public void aggregation() throws Exception {
-        try (var rs = stmt.executeQuery("SELECT SUM(i) FROM integers")) {
+        try (var rs = stmt.executeQuery("SELECT i, SUM(j) FROM integers GROUP BY i ORDER BY i")) {
             while (rs.next()) {
-                if (rs.getInt(1) != 20000000) {
+                if (expecteds[rs.getInt(1)] != rs.getInt(2)) {
                     throw new RuntimeException("unexpected result");
                 }
             }
