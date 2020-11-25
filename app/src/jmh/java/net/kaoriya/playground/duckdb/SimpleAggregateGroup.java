@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
-public class SimpleAggregate {
+public class SimpleAggregateGroup {
 
     Connection conn;
     Statement stmt;
@@ -23,7 +23,7 @@ public class SimpleAggregate {
     public void openDB() throws Exception {
         conn = java.sql.DriverManager.getConnection("jdbc:duckdb:");
         stmt = conn.createStatement();
-        stmt.execute("CREATE TABLE integers AS SELECT i % 5 AS i FROM range(0, 10000000) tbl(i);");
+        stmt.execute("CREATE TABLE integers AS SELECT i % 5 AS i, i % 100 AS j FROM range(0, 10000000) tbl(i);");
     }
 
     @TearDown
@@ -34,14 +34,17 @@ public class SimpleAggregate {
         conn = null;
     }
 
+    final static int[] expecteds = new int[]{95000000, 97000000, 99000000, 101000000, 103000000};
+
     @Benchmark
     public void aggregation() throws Exception {
-        try (var rs = stmt.executeQuery("SELECT SUM(i) FROM integers")) {
+        try (var rs = stmt.executeQuery("SELECT i, SUM(j) FROM integers GROUP BY i ORDER BY i")) {
             while (rs.next()) {
-                if (rs.getInt(1) != 20000000) {
+                if (expecteds[rs.getInt(1)] != rs.getInt(2)) {
                     throw new RuntimeException("unexpected result");
                 }
             }
         }
     }
 }
+
