@@ -10,19 +10,19 @@ import org.openjdk.jmh.annotations.State;
 
 import java.util.concurrent.TimeUnit;
 
-public class OpenBenchmark {
+public class DuckDB_01_OpenDatabase {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
-    public void openDuckDB() throws Exception {
+    public void DuckDB() throws Exception {
         try(var conn = java.sql.DriverManager.getConnection("jdbc:duckdb:")) {}
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
-    public void openSQLite3() throws Exception {
+    public void SQLite3() throws Exception {
         try(var conn = java.sql.DriverManager.getConnection("jdbc:sqlite::memory:")) {}
     }
 }

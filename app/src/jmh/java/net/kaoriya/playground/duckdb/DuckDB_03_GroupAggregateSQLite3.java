@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
-public class SQLite3SimpleAggregateGroup {
+public class DuckDB_03_GroupAggregateSQLite3 {
 
     Connection conn;
     Statement stmt;
