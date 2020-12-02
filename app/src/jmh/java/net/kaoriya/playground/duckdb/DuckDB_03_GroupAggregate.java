@@ -60,7 +60,7 @@ public class DuckDB_03_GroupAggregate {
 
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
-    @Measurement(iterations = 3)
+    @Measurement(iterations = 1)
     public void SQLite3(SQLite3 db) throws Exception {
         runBenchmark(db);
     }
