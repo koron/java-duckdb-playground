@@ -18,13 +18,15 @@ public class DuckDB_04_Import {
     @State(Scope.Benchmark)
     public static class DuckDB extends Database.DuckDB {}
 
-    final static String DIR = "D:/home/koron/work/github.com/koron/java-duckdb-playground/app/tmp/";
+    static String datadir() {
+        return System.getProperty("project.dir")+ "/tmp/";
+    }
 
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
     public void CSV_02_SimpleAggregate(DuckDB db) throws Exception {
-        try (var rs = db.stmt.executeQuery("SELECT SUM(i) FROM read_csv_auto('" + DIR + "simple.csv')")) {
+        try (var rs = db.stmt.executeQuery("SELECT SUM(i) FROM read_csv_auto('" + datadir() + "simple.csv')")) {
             while (rs.next()) {
                 if (rs.getInt(1) != 20000000) {
                     throw new RuntimeException("unexpected result");
@@ -39,7 +41,7 @@ public class DuckDB_04_Import {
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
     public void CSV_03_GroupAggregate(DuckDB db) throws Exception {
-        try (var rs = db.stmt.executeQuery("SELECT i, SUM(j) FROM read_csv_auto('" + DIR + "group.csv') GROUP BY i ORDER BY i")) {
+        try (var rs = db.stmt.executeQuery("SELECT i, SUM(j) FROM read_csv_auto('" + datadir() + "group.csv') GROUP BY i ORDER BY i")) {
             while (rs.next()) {
                 if (expecteds[rs.getInt(1)] != rs.getInt(2)) {
                     throw new RuntimeException("unexpected result");
@@ -52,7 +54,7 @@ public class DuckDB_04_Import {
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
     public void Parquet_02_SimpleAggregate(DuckDB db) throws Exception {
-        try (var rs = db.stmt.executeQuery("SELECT SUM(i) FROM parquet_scan('" + DIR + "simple.parquet')")) {
+        try (var rs = db.stmt.executeQuery("SELECT SUM(i) FROM parquet_scan('" + datadir() + "simple.parquet')")) {
             while (rs.next()) {
                 if (rs.getInt(1) != 20000000) {
                     throw new RuntimeException("unexpected result");
@@ -65,7 +67,7 @@ public class DuckDB_04_Import {
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
     public void Parquet_03_GroupAggregate(DuckDB db) throws Exception {
-        try (var rs = db.stmt.executeQuery("SELECT i, SUM(j) FROM parquet_scan('" + DIR + "group.parquet') GROUP BY i ORDER BY i")) {
+        try (var rs = db.stmt.executeQuery("SELECT i, SUM(j) FROM parquet_scan('" + datadir() + "group.parquet') GROUP BY i ORDER BY i")) {
             while (rs.next()) {
                 if (expecteds[rs.getInt(1)] != rs.getInt(2)) {
                     throw new RuntimeException("unexpected result");

@@ -13,16 +13,12 @@
     $ mv *.parquet tmp/
     ```
 
-2.  Modify path to test data
-
-    Change `DuckDB_04_Import.DIR` to fit your env.
-
-3.  Run benchmark
+2.  Run benchmark
 
     ```console
     $ ./gradlew jmh
     ```
 
-4.  Check resultS
+3.  Check resultS
 
     Check `build/reports/jmh/results.txt`

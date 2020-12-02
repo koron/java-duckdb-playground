@@ -40,5 +40,7 @@ jmh {
     warmup = '1s'
     warmupIterations = 1
 
+    jvmArgsAppend = "-Dproject.dir=${projectDir}"
+
     //include = 'DuckDB_04'
 }
