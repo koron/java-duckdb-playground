@@ -42,5 +42,5 @@ jmh {
 
     jvmArgsAppend = "-Dproject.dir=${projectDir}"
 
-    //include = 'DuckDB_04'
+    //include = 'DuckDB_05'
 }
