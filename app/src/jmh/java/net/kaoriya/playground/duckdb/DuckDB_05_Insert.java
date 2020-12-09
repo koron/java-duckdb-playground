@@ -127,7 +127,7 @@ public class DuckDB_05_Insert {
 
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
-    @Measurement(iterations = 1)
+    @Measurement(iterations = 10)
     public void SingleCommit_100K_SQLite3(SQLite3 db) throws Exception {
         db.conn.setAutoCommit(false);
         try (var p = db.conn.prepareStatement("INSERT INTO integers VALUES(?, ?)")) {
