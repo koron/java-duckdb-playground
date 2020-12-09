@@ -1,0 +1,17 @@
+Benchmark                                     Mode  Cnt       Score        Error  Units
+DuckDB_01_OpenDatabase.DuckDB                thrpt    3     955.892 ±    123.011  ops/s
+DuckDB_01_OpenDatabase.SQLite3               thrpt    3   25762.661 ±   7731.787  ops/s
+DuckDB_05_Insert.Separately_DuckDB           thrpt    3    9680.090 ±    743.331  ops/s
+DuckDB_05_Insert.Separately_SQLite3          thrpt    3  434624.742 ± 115026.565  ops/s
+DuckDB_02_SimpleAggregate.DuckDB                ss   10       0.024 ±      0.001   s/op
+DuckDB_02_SimpleAggregate.SQLite3               ss    5       0.336 ±      0.067   s/op
+DuckDB_03_GroupAggregate.DuckDB                 ss   10       0.103 ±      0.002   s/op
+DuckDB_03_GroupAggregate.SQLite3                ss            2.988                s/op
+DuckDB_04_Import.CSV_02_SimpleAggregate         ss            0.292                s/op
+DuckDB_04_Import.CSV_03_GroupAggregate          ss            0.646                s/op
+DuckDB_04_Import.Parquet_02_SimpleAggregate     ss            0.047                s/op
+DuckDB_04_Import.Parquet_03_GroupAggregate      ss            0.137                s/op
+DuckDB_05_Insert.SingleCommit_100K_DuckDB       ss            3.709                s/op
+DuckDB_05_Insert.SingleCommit_100K_SQLite3      ss   10       0.044 ±      0.002   s/op
+DuckDB_06_Update.BulkByWhere_01_DuckDB          ss            0.363                s/op
+DuckDB_06_Update.BulkByWhere_01_SQLite3         ss            2.298                s/op
